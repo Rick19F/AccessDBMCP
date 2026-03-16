@@ -4,7 +4,7 @@ A standalone MCP (Model Context Protocol) server for interacting with Microsoft 
 
 ## Overview
 
-This MCP server provides tools to connect to and query Microsoft Access databases (.accdb and .mdb files) using pyodbc. It is designed to be used as a standalone service, completely separate from the main AMS-MIS-EDESAL codebase.
+This MCP server provides tools to connect to and query Microsoft Access databases (.accdb and .mdb files) using pyodbc.
 
 ## Requirements
 
