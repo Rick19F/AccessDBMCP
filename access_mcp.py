@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional, Union
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
-from mcp.server.handlers import ListToolsRequestHandler, CallToolRequestHandler
+# from mcp.server.handlers import ListToolsRequestHandler, CallToolRequestHandler
 
 
 class AccessDatabase:
