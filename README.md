@@ -19,7 +19,8 @@ This MCP server provides tools to connect to and query Microsoft Access database
 ```bash
 cd access-mcp
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# On Windows: venv\Scripts\activate
+# On Linux/Mac: source venv/bin/activate
 ```
 
 2. **Install dependencies:**
@@ -30,8 +31,9 @@ pip install -r requirements.txt
 
 3. **Install Microsoft Access ODBC Driver:**
 
-On Windows, the driver is typically included with Microsoft Office.  
-On Linux, you may need to use MDBTools or a Windows VM.
+On Windows, the driver is typically included with Microsoft Office.
+If not, download Microsoft Access Runtime from:
+https://www.microsoft.com/en-us/download/details.aspx?id=54920
 
 ## Usage
 
@@ -39,13 +41,15 @@ On Linux, you may need to use MDBTools or a Windows VM.
 
 ```bash
 # Activate virtual environment first
-source venv/bin/activate
+# On Windows: venv\Scripts\activate
+# On Linux/Mac: source venv/bin/activate
 
-# Run the MCP server
+# Run the MCP server (stdio mode - default)
 python access_mcp.py
-```
 
-The server will start and listen for MCP requests via stdio.
+# Or run in TCP mode for remote connections:
+python access_mcp.py --mode tcp --host 0.0.0.0 --port 5000
+```
 
 ### Available Tools
 
@@ -136,10 +140,22 @@ access-mcp/
 
 ## Notes
 
-- This MCP server uses stdio for communication, making it compatible with various MCP clients
+- This MCP server supports both stdio and TCP communication modes
+- Use `--mode tcp --host 0.0.0.0 --port 5000` for remote connections
 - The server automatically filters out Microsoft Access system tables (MSys\*)
 - Connection strings use the Microsoft Access Driver (_.mdb, _.accdb)
 - The driver must be installed on the system for the connection to work
+
+## Remote Access (TCP Mode)
+
+For connecting from a remote machine, run the MCP server in TCP mode:
+
+```bash
+# On the Windows machine:
+python access_mcp.py --mode tcp --host 0.0.0.0 --port 5000
+```
+
+Then connect from your client using TCP. You may need an SSH tunnel or VPN for security.
 
 ## Troubleshooting
 
