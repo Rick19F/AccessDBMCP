@@ -438,49 +438,12 @@ async def call_tool(name: str, arguments: Any) -> List[TextContent]:
 
 async def main():
     """Run the MCP server."""
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='Access Database MCP Server')
-    parser.add_argument('--mode', choices=['stdio', 'tcp'], default='stdio',
-                        help='Communication mode: stdio (default) or tcp')
-    parser.add_argument('--host', default='0.0.0.0', help='TCP host (default: 0.0.0.0)')
-    parser.add_argument('--port', type=int, default=5000, help='TCP port (default: 5000)')
-    
-    args = parser.parse_args()
-    
-    if args.mode == 'tcp':
-        # Run TCP server
-        from mcp.server import Server
-        import socket
-        
-        print(f"Starting TCP MCP server on {args.host}:{args.port}")
-        
-        async def handle_client(reader, writer):
-            addr = writer.get_extra_info('peername')
-            print(f"Client connected: {addr}")
-            
-            await app.run(
-                reader,
-                writer,
-                app.create_initialization_options()
-            )
-            
-            print(f"Client disconnected: {addr}")
-        
-        server = await asyncio.start_server(
-            handle_client, args.host, args.port
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(
+            read_stream,
+            write_stream,
+            app.create_initialization_options()
         )
-        
-        async with server:
-            await server.serve_forever()
-    else:
-        # Run stdio server (default)
-        async with stdio_server() as (read_stream, write_stream):
-            await app.run(
-                read_stream,
-                write_stream,
-                app.create_initialization_options()
-            )
 
 
 if __name__ == "__main__":
